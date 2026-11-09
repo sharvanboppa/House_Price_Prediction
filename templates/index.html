@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>House Price Prediction | Machine Learning Project</title>
+
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --green: #087b57;
+    --dark: #071d18;
+    --gold: #d7b46a;
+    --white: #ffffff;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: 'DM Sans', sans-serif;
+    background: #071d18;
+}
+
+.page {
+    width: 100%;
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 35% 65%;
+    overflow: hidden;
+}
+
+/* LEFT PROFILE SECTION */
+
+.profile {
+    position: relative;
+    height: 100vh;
+    padding: clamp(22px, 3vw, 42px);
+    background:
+        radial-gradient(circle at 15% 10%, #145c45, transparent 40%),
+        linear-gradient(145deg, #0b3025, #061a15 80%);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+    border-right: 1px solid #ffffff20;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 17px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.brand-icon {
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    border-radius: 12px;
+    background: var(--gold);
+    color: #09251b;
+    font-size: 23px;
+}
+
+.profile-content {
+    position: relative;
+    z-index: 2;
+    margin: auto 0;
+}
+
+/* PROFILE IMAGE */
+
+.photo-frame {
+    width: 190px;
+    height: 205px;
+    padding: 5px;
+    border: 1px solid var(--gold);
+    border-radius: 19px;
+    background: #ffffff12;
+    box-shadow: 0 15px 40px #0005;
+    margin-bottom: 22px;
+    overflow: hidden;
+}
+
+.photo-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    border-radius: 13px;
+    display: block;
+    image-rendering: auto;
+}
+
+.eyebrow {
+    color: var(--gold);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-size: 10px;
+    font-weight: 800;
+    margin-bottom: 9px;
+}
+
+.profile h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(25px, 3vw, 39px);
+    line-height: 1.15;
+    margin-bottom: 8px;
+}
+
+.role {
+    color: var(--gold);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 22px;
+}
+
+.profile-line {
+    width: 55px;
+    height: 2px;
+    background: var(--gold);
+    margin-bottom: 20px;
+}
+
+.about-title {
+    font-size: 15px;
+    margin-bottom: 9px;
+}
+
+.about {
+    color: #b7c9c1;
+    font-size: 12px;
+    line-height: 1.8;
+    max-width: 390px;
+}
+
+.contact {
+    display: grid;
+    gap: 12px;
+    margin-top: 23px;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 12px;
+    color: #e4eee9;
+    min-width: 0;
+}
+
+.contact-icon {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    border: 1px solid #ffffff25;
+    background: #ffffff0c;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    color: var(--gold);
+}
+
+.contact-item span:last-child {
+    overflow-wrap: anywhere;
+}
+
+.profile-footer {
+    position: relative;
+    z-index: 2;
+    color: #78968a;
+    font-size: 10px;
+    letter-spacing: 1px;
+    padding-top: 15px;
+    border-top: 1px solid #ffffff20;
+}
+
+/* LEFT ARCHITECTURE */
+
+.architecture {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 170px;
+    opacity: .13;
+    display: flex;
+    align-items: end;
+    justify-content: center;
+    gap: 8px;
+    pointer-events: none;
+}
+
+.building {
+    width: 14%;
+    border: 1px solid var(--gold);
+    background: repeating-linear-gradient(
+        to bottom,
+        transparent 0 13px,
+        var(--gold) 14px 16px
+    );
+}
+
+.building:nth-child(1) { height: 65%; }
+.building:nth-child(2) { height: 100%; width: 18%; }
+.building:nth-child(3) { height: 75%; }
+.building:nth-child(4) { height: 55%; }
+.building:nth-child(5) { height: 85%; width: 16%; }
+
+/* RIGHT PREDICTION SECTION */
+
+.main {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+    background:
+        radial-gradient(ellipse at 90% 0%, #d7b46a22, transparent 36%),
+        linear-gradient(135deg, #f5f8f6, #eaf1ed);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(16px, 2.5vw, 36px);
+}
+
+.main-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 850px;
+}
+
+.top-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    color: var(--green);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.top-label:before,
+.top-label:after {
+    content: "";
+    width: 30px;
+    height: 1px;
+    background: #b9cbbf;
+}
+
+.heading {
+    text-align: center;
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(27px, 3vw, 40px);
+    color: #102d23;
+    line-height: 1.15;
+}
+
+.heading span {
+    color: var(--green);
+}
+
+.subtitle {
+    text-align: center;
+    color: #718079;
+    font-size: 12px;
+    margin-top: 9px;
+    margin-bottom: 22px;
+}
+
+/* FORM CARD */
+
+.form-card {
+    width: 100%;
+    background: white;
+    border: 1px solid #dce8e0;
+    border-radius: 20px;
+    padding: clamp(17px, 2.2vw, 27px);
+    box-shadow: 0 18px 55px #173d2b12;
+    position: relative;
+}
+
+.form-card:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 35px;
+    right: 35px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--green), var(--gold));
+    border-radius: 0 0 5px 5px;
+}
+
+.form-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 19px;
+}
+
+.form-heading h2 {
+    font-size: 17px;
+    color: #153a2c;
+}
+
+.form-heading p {
+    font-size: 10px;
+    color: #87948d;
+    margin-top: 4px;
+}
+
+.required {
+    color: #9b7650;
+    font-size: 10px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px 20px;
+}
+
+.field label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    color: #344d40;
+    margin-bottom: 7px;
+}
+
+.field input,
+.field select {
+    width: 100%;
+    height: 43px;
+    padding: 0 13px;
+    border: 1px solid #dce5df;
+    border-radius: 9px;
+    background: #f9fbfa;
+    color: #263d32;
+    font-family: inherit;
+    font-size: 12px;
+    outline: none;
+    transition: .2s;
+}
+
+.field input:focus,
+.field select:focus {
+    border-color: var(--green);
+    background: white;
+    box-shadow: 0 0 0 3px #087b5715;
+}
+
+.field input::placeholder {
+    color: #a4afa9;
+}
+
+/* CITY MAPPING DISPLAY */
+
+.mapping-info {
+    margin-top: 7px;
+    font-size: 10px;
+    font-weight: 600;
+    color: #087b57;
+    background: #e9f6ef;
+    padding: 7px 10px;
+    border-radius: 6px;
+    border: 1px solid #cce7d7;
+}
+
+.submit-btn {
+    width: 100%;
+    height: 48px;
+    border: 0;
+    border-radius: 10px;
+    margin-top: 21px;
+    background: linear-gradient(100deg, #087b57, #07553e);
+    color: white;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: .5px;
+    cursor: pointer;
+    box-shadow: 0 7px 18px #087b5730;
+    transition: .25s;
+}
+
+.submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 11px 25px #087b5745;
+}
+
+.result {
+    margin-top: 15px;
+    padding: 13px;
+    text-align: center;
+    border-radius: 10px;
+    background: #e9f6ef;
+    border: 1px solid #b9dfc8;
+    color: #087247;
+    font-weight: 800;
+    font-size: 14px;
+}
+
+.error {
+    background: #fff0ed;
+    border-color: #f2c5bc;
+    color: #b43d2c;
+}
+
+.bottom-note {
+    margin-top: 16px;
+    color: #8a9990;
+    font-size: 10px;
+    text-align: center;
+    letter-spacing: .4px;
+}
+
+/* RIGHT SIDE HOUSE ILLUSTRATION */
+
+.right-art {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 240px;
+    height: 170px;
+    opacity: .09;
+    pointer-events: none;
+}
+
+.right-art svg {
+    width: 100%;
+    height: 100%;
+}
+
+/* SHORT DESKTOP SCREEN */
+
+@media (max-height: 750px) and (min-width: 751px) {
+    .profile { padding: 18px 25px; }
+    .photo-frame {
+        width: 125px;
+        height: 135px;
+        margin-bottom: 12px;
+    }
+    .profile h1 { font-size: 27px; }
+    .role { margin-bottom: 12px; }
+    .profile-line { margin-bottom: 12px; }
+    .contact { margin-top: 14px; gap: 8px; }
+    .contact-icon { width: 27px; height: 27px; }
+    .main { padding: 12px 25px; }
+    .subtitle { margin-bottom: 13px; }
+    .form-card { padding: 15px 22px; }
+    .form-grid { gap: 10px 16px; }
+    .field input, .field select { height: 37px; }
+    .form-heading { margin-bottom: 12px; }
+    .submit-btn { height: 42px; margin-top: 13px; }
+    .bottom-note { margin-top: 9px; }
+}
+
+/* MOBILE RESPONSIVE */
+
+@media (max-width: 750px) {
+    html, body {
+        height: auto;
+        min-height: 100%;
+        overflow: auto;
+    }
+
+    .page {
+        height: auto;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        overflow: visible;
+    }
+
+    .profile {
+        height: auto;
+        padding: 25px;
+        overflow: hidden;
+    }
+
+    .profile-content {
+        margin: 25px 0;
+    }
+
+    .photo-frame {
+        width: 120px;
+        height: 130px;
+    }
+
+    .profile h1 { font-size: 30px; }
+    .profile-footer { margin-top: 15px; }
+
+    .main {
+        height: auto;
+        min-height: 650px;
+        padding: 30px 17px;
+        overflow: visible;
+    }
+
+    .main-content { max-width: 520px; }
+    .heading { font-size: 30px; }
+    .form-grid { grid-template-columns: 1fr; }
+    .form-card { padding: 22px 17px; }
+    .right-art { width: 130px; height: 110px; }
+}
+
+@media (max-width: 380px) {
+    .profile { padding: 20px; }
+    .heading { font-size: 26px; }
+    .form-heading h2 { font-size: 15px; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="page">
+
+    <!-- LEFT PROFILE PANEL -->
+
+    <aside class="profile">
+
+        <div class="brand">
+            <div class="brand-icon">⌂</div>
+            HOUSE PRICE PREDICTION
+        </div>
+
+        <div class="profile-content">
+
+            <div class="photo-frame">
+                <img src="{{ url_for('static', filename='Linkdin profile.jpeg') }}"
+                     alt="Boppa Sharvan">
+            </div>
+
+            <h1>Boppa Sharvan</h1>
+
+            <p class="role">Aspiring Data Scientist</p>
+
+            <div class="profile-line"></div>
+
+            <h3 class="about-title">About This Project</h3>
+
+            <p class="about">
+                This House Price Prediction system uses Machine Learning
+                to estimate residential property prices based on important
+                housing features. It analyzes location, bedrooms, bathrooms,
+                living area, lot size, house condition and construction year
+                to generate an estimated property value.
+            </p>
+
+            <div class="contact">
+
+                <div class="contact-item">
+                    <div class="contact-icon">☎</div>
+                    <span>8660615881</span>
+                </div>
+
+                <div class="contact-item">
+                    <div class="contact-icon">✉</div>
+                    <span>boppasharvan024@gmail.com</span>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="profile-footer">
+            HOUSE PRICE PREDICTION PROJECT
+            DEVELOPED BY BOPPA SHARVAN &nbsp; @ &nbsp;2026
+        </div>
+
+        <div class="architecture">
+            <div class="building"></div>
+            <div class="building"></div>
+            <div class="building"></div>
+            <div class="building"></div>
+            <div class="building"></div>
+        </div>
+
+    </aside>
+
+    <!-- RIGHT PREDICTION PANEL -->
+
+    <main class="main">
+
+        <div class="main-content">
+
+            <div class="top-label">
+                Machine Learning Based System
+            </div>
+
+            <h1 class="heading">
+                House Price Prediction<br>
+                <span>Predict Your Dream House Price</span>
+            </h1>
+
+            <p class="subtitle">
+                Enter the property details to discover its estimated market value.
+            </p>
+
+            <div class="form-card">
+
+                <div class="form-heading">
+                    <div>
+                        <h2>Property Details</h2>
+                        <p>Fill in all the details below for price prediction</p>
+                    </div>
+
+                    <span class="required">* Required fields</span>
+                </div>
+
+                <form action="/predict" method="POST">
+
+                    <div class="form-grid">
+
+                        <!-- CITY WITH MAPPING -->
+
+                        <div class="field">
+                            <label>City *</label>
+
+                            <select name="city" id="citySelect" required>
+                                {% for city in cities %}
+                                <option value="{{ city }}"
+                                        data-code="{{ city_mapping[city] }}"
+                                        {% if selected_city is defined and selected_city == city %}
+                                        selected
+                                        {% endif %}>
+                                    {{ city }}
+                                </option>
+                                {% endfor %}
+                            </select>
+
+                            <div class="mapping-info" id="mappingInfo">
+                                Selected City Mapping Value: 0
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label>State ZIP Code *</label>
+                            <input type="text" name="statezip"
+                                   placeholder="e.g. WA 98103" required>
+                        </div>
+
+                        <div class="field">
+                            <label>Number of Bedrooms *</label>
+                            <input type="number" name="bedrooms"
+                                   min="0" step="any"
+                                   placeholder="e.g. 3" required>
+                        </div>
+
+                        <div class="field">
+                            <label>Number of Bathrooms *</label>
+                            <input type="number" name="bathrooms"
+                                   min="0" step="any"
+                                   placeholder="e.g. 2" required>
+                        </div>
+
+                        <div class="field">
+                            <label>Living Area (Sq Ft) *</label>
+                            <input type="number" name="sqft_living"
+                                   min="1" placeholder="e.g. 1800" required>
+                        </div>
+
+                        <div class="field">
+                            <label>Lot Area (Sq Ft) *</label>
+                            <input type="number" name="sqft_lot"
+                                   min="1" placeholder="e.g. 5000" required>
+                        </div>
+
+                        <div class="field">
+                            <label>Number of Floors *</label>
+                            <input type="number" name="floors"
+                                   min="1" step="any"
+                                   placeholder="e.g. 2" required>
+                        </div>
+
+                        <div class="field">
+                            <label>House Condition (1–5) *</label>
+                            <select name="condition" required>
+                                <option value="">Select condition</option>
+                                <option value="1">1 - Poor</option>
+                                <option value="2">2 - Fair</option>
+                                <option value="3">3 - Average</option>
+                                <option value="4">4 - Good</option>
+                                <option value="5">5 - Excellent</option>
+                            </select>
+                        </div>
+
+                        <div class="field">
+                            <label>Year Built *</label>
+                            <input type="number" name="yr_built"
+                                   min="1800" max="2026"
+                                   placeholder="e.g. 2005" required>
+                        </div>
+
+                    </div>
+
+                    <button type="submit" class="submit-btn">
+                        ✦ &nbsp; PREDICT HOUSE PRICE &nbsp; →
+                    </button>
+
+                </form>
+
+                {% if prediction_text %}
+                <div class="result">{{ prediction_text }}</div>
+                {% endif %}
+
+                {% if error_text %}
+                <div class="result error">{{ error_text }}</div>
+                {% endif %}
+
+            </div>
+
+            <p class="bottom-note">
+                POWERED BY MACHINE LEARNING
+                &nbsp; | &nbsp;
+                INTELLIGENT PROPERTY PRICE ESTIMATION
+            </p>
+
+        </div>
+
+        <div class="right-art">
+            <svg viewBox="0 0 250 180" fill="none"
+                 stroke="#087b57" stroke-width="2">
+                <path d="M5 175V85H65V175 M75 175V30H145V175 M155 175V65H225V175"/>
+                <path d="M85 45H135 M85 60H135 M85 75H135 M85 90H135 M85 105H135 M85 120H135"/>
+                <path d="M15 100H55 M15 120H55 M15 140H55"/>
+                <path d="M165 85H215 M165 105H215 M165 125H215"/>
+                <path d="M110 30V10L125 0L140 10V30"/>
+                <path d="M0 175H250"/>
+            </svg>
+        </div>
+
+    </main>
+
+</div>
+
+<!-- CITY MAPPING SCRIPT -->
+
+<script>
+const citySelect = document.getElementById("citySelect");
+const mappingInfo = document.getElementById("mappingInfo");
+
+function updateCityMapping() {
+    const selectedOption =
+        citySelect.options[citySelect.selectedIndex];
+
+    const city = selectedOption.value;
+    const mapping = selectedOption.dataset.code;
+
+    mappingInfo.textContent =
+        "Selected City: " + city +
+        " | Mapping Value: " + mapping;
+}
+
+citySelect.addEventListener("change", updateCityMapping);
+updateCityMapping();
+</script>
+
+</body>
+</html>
