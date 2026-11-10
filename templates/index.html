@@ -1,779 +1,1420 @@
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>House Price Prediction | Machine Learning Project</title>
-
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
-
-<style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-:root {
-    --green: #087b57;
-    --dark: #071d18;
-    --gold: #d7b46a;
-    --white: #ffffff;
-}
-
-html, body {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    font-family: 'DM Sans', sans-serif;
-    background: #071d18;
-}
-
-.page {
-    width: 100%;
-    height: 100vh;
-    display: grid;
-    grid-template-columns: 35% 65%;
-    overflow: hidden;
-}
-
-/* LEFT PROFILE SECTION */
-
-.profile {
-    position: relative;
-    height: 100vh;
-    padding: clamp(22px, 3vw, 42px);
-    background:
-        radial-gradient(circle at 15% 10%, #145c45, transparent 40%),
-        linear-gradient(145deg, #0b3025, #061a15 80%);
-    color: white;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    overflow: hidden;
-    border-right: 1px solid #ffffff20;
-}
-
-.brand {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-size: 17px;
-    font-weight: 800;
-    letter-spacing: 2px;
-}
-
-.brand-icon {
-    width: 40px;
-    height: 40px;
-    display: grid;
-    place-items: center;
-    border-radius: 12px;
-    background: var(--gold);
-    color: #09251b;
-    font-size: 23px;
-}
-
-.profile-content {
-    position: relative;
-    z-index: 2;
-    margin: auto 0;
-}
-
-/* PROFILE IMAGE */
-
-.photo-frame {
-    width: 190px;
-    height: 205px;
-    padding: 5px;
-    border: 1px solid var(--gold);
-    border-radius: 19px;
-    background: #ffffff12;
-    box-shadow: 0 15px 40px #0005;
-    margin-bottom: 22px;
-    overflow: hidden;
-}
-
-.photo-frame img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    object-position: center;
-    border-radius: 13px;
-    display: block;
-    image-rendering: auto;
-}
-
-.eyebrow {
-    color: var(--gold);
-    text-transform: uppercase;
-    letter-spacing: 3px;
-    font-size: 10px;
-    font-weight: 800;
-    margin-bottom: 9px;
-}
-
-.profile h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(25px, 3vw, 39px);
-    line-height: 1.15;
-    margin-bottom: 8px;
-}
-
-.role {
-    color: var(--gold);
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    margin-bottom: 22px;
-}
-
-.profile-line {
-    width: 55px;
-    height: 2px;
-    background: var(--gold);
-    margin-bottom: 20px;
-}
-
-.about-title {
-    font-size: 15px;
-    margin-bottom: 9px;
-}
-
-.about {
-    color: #b7c9c1;
-    font-size: 12px;
-    line-height: 1.8;
-    max-width: 390px;
-}
-
-.contact {
-    display: grid;
-    gap: 12px;
-    margin-top: 23px;
-}
-
-.contact-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-size: 12px;
-    color: #e4eee9;
-    min-width: 0;
-}
-
-.contact-icon {
-    width: 32px;
-    height: 32px;
-    flex-shrink: 0;
-    border: 1px solid #ffffff25;
-    background: #ffffff0c;
-    border-radius: 10px;
-    display: grid;
-    place-items: center;
-    color: var(--gold);
-}
-
-.contact-item span:last-child {
-    overflow-wrap: anywhere;
-}
-
-.profile-footer {
-    position: relative;
-    z-index: 2;
-    color: #78968a;
-    font-size: 10px;
-    letter-spacing: 1px;
-    padding-top: 15px;
-    border-top: 1px solid #ffffff20;
-}
-
-/* LEFT ARCHITECTURE */
-
-.architecture {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 170px;
-    opacity: .13;
-    display: flex;
-    align-items: end;
-    justify-content: center;
-    gap: 8px;
-    pointer-events: none;
-}
-
-.building {
-    width: 14%;
-    border: 1px solid var(--gold);
-    background: repeating-linear-gradient(
-        to bottom,
-        transparent 0 13px,
-        var(--gold) 14px 16px
-    );
-}
-
-.building:nth-child(1) { height: 65%; }
-.building:nth-child(2) { height: 100%; width: 18%; }
-.building:nth-child(3) { height: 75%; }
-.building:nth-child(4) { height: 55%; }
-.building:nth-child(5) { height: 85%; width: 16%; }
-
-/* RIGHT PREDICTION SECTION */
-
-.main {
-    position: relative;
-    height: 100vh;
-    overflow: hidden;
-    background:
-        radial-gradient(ellipse at 90% 0%, #d7b46a22, transparent 36%),
-        linear-gradient(135deg, #f5f8f6, #eaf1ed);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: clamp(16px, 2.5vw, 36px);
-}
-
-.main-content {
-    position: relative;
-    z-index: 2;
-    width: 100%;
-    max-width: 850px;
-}
-
-.top-label {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 9px;
-    color: var(--green);
-    font-size: 11px;
-    font-weight: 800;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    margin-bottom: 10px;
-}
-
-.top-label:before,
-.top-label:after {
-    content: "";
-    width: 30px;
-    height: 1px;
-    background: #b9cbbf;
-}
-
-.heading {
-    text-align: center;
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(27px, 3vw, 40px);
-    color: #102d23;
-    line-height: 1.15;
-}
-
-.heading span {
-    color: var(--green);
-}
-
-.subtitle {
-    text-align: center;
-    color: #718079;
-    font-size: 12px;
-    margin-top: 9px;
-    margin-bottom: 22px;
-}
-
-/* FORM CARD */
-
-.form-card {
-    width: 100%;
-    background: white;
-    border: 1px solid #dce8e0;
-    border-radius: 20px;
-    padding: clamp(17px, 2.2vw, 27px);
-    box-shadow: 0 18px 55px #173d2b12;
-    position: relative;
-}
-
-.form-card:before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 35px;
-    right: 35px;
-    height: 3px;
-    background: linear-gradient(90deg, var(--green), var(--gold));
-    border-radius: 0 0 5px 5px;
-}
-
-.form-heading {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 19px;
-}
-
-.form-heading h2 {
-    font-size: 17px;
-    color: #153a2c;
-}
-
-.form-heading p {
-    font-size: 10px;
-    color: #87948d;
-    margin-top: 4px;
-}
-
-.required {
-    color: #9b7650;
-    font-size: 10px;
-}
-
-.form-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px 20px;
-}
-
-.field label {
-    display: block;
-    font-size: 11px;
-    font-weight: 700;
-    color: #344d40;
-    margin-bottom: 7px;
-}
-
-.field input,
-.field select {
-    width: 100%;
-    height: 43px;
-    padding: 0 13px;
-    border: 1px solid #dce5df;
-    border-radius: 9px;
-    background: #f9fbfa;
-    color: #263d32;
-    font-family: inherit;
-    font-size: 12px;
-    outline: none;
-    transition: .2s;
-}
-
-.field input:focus,
-.field select:focus {
-    border-color: var(--green);
-    background: white;
-    box-shadow: 0 0 0 3px #087b5715;
-}
-
-.field input::placeholder {
-    color: #a4afa9;
-}
-
-/* CITY MAPPING DISPLAY */
-
-.mapping-info {
-    margin-top: 7px;
-    font-size: 10px;
-    font-weight: 600;
-    color: #087b57;
-    background: #e9f6ef;
-    padding: 7px 10px;
-    border-radius: 6px;
-    border: 1px solid #cce7d7;
-}
-
-.submit-btn {
-    width: 100%;
-    height: 48px;
-    border: 0;
-    border-radius: 10px;
-    margin-top: 21px;
-    background: linear-gradient(100deg, #087b57, #07553e);
-    color: white;
-    font-family: inherit;
-    font-size: 13px;
-    font-weight: 800;
-    letter-spacing: .5px;
-    cursor: pointer;
-    box-shadow: 0 7px 18px #087b5730;
-    transition: .25s;
-}
-
-.submit-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 11px 25px #087b5745;
-}
-
-.result {
-    margin-top: 15px;
-    padding: 13px;
-    text-align: center;
-    border-radius: 10px;
-    background: #e9f6ef;
-    border: 1px solid #b9dfc8;
-    color: #087247;
-    font-weight: 800;
-    font-size: 14px;
-}
-
-.error {
-    background: #fff0ed;
-    border-color: #f2c5bc;
-    color: #b43d2c;
-}
-
-.bottom-note {
-    margin-top: 16px;
-    color: #8a9990;
-    font-size: 10px;
-    text-align: center;
-    letter-spacing: .4px;
-}
-
-/* RIGHT SIDE HOUSE ILLUSTRATION */
-
-.right-art {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    width: 240px;
-    height: 170px;
-    opacity: .09;
-    pointer-events: none;
-}
-
-.right-art svg {
-    width: 100%;
-    height: 100%;
-}
-
-/* SHORT DESKTOP SCREEN */
-
-@media (max-height: 750px) and (min-width: 751px) {
-    .profile { padding: 18px 25px; }
-    .photo-frame {
-        width: 125px;
-        height: 135px;
-        margin-bottom: 12px;
-    }
-    .profile h1 { font-size: 27px; }
-    .role { margin-bottom: 12px; }
-    .profile-line { margin-bottom: 12px; }
-    .contact { margin-top: 14px; gap: 8px; }
-    .contact-icon { width: 27px; height: 27px; }
-    .main { padding: 12px 25px; }
-    .subtitle { margin-bottom: 13px; }
-    .form-card { padding: 15px 22px; }
-    .form-grid { gap: 10px 16px; }
-    .field input, .field select { height: 37px; }
-    .form-heading { margin-bottom: 12px; }
-    .submit-btn { height: 42px; margin-top: 13px; }
-    .bottom-note { margin-top: 9px; }
-}
-
-/* MOBILE RESPONSIVE */
-
-@media (max-width: 750px) {
-    html, body {
-        height: auto;
-        min-height: 100%;
-        overflow: auto;
-    }
-
-    .page {
-        height: auto;
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        overflow: visible;
-    }
-
-    .profile {
-        height: auto;
-        padding: 25px;
-        overflow: hidden;
-    }
-
-    .profile-content {
-        margin: 25px 0;
-    }
-
-    .photo-frame {
-        width: 120px;
-        height: 130px;
-    }
-
-    .profile h1 { font-size: 30px; }
-    .profile-footer { margin-top: 15px; }
-
-    .main {
-        height: auto;
-        min-height: 650px;
-        padding: 30px 17px;
-        overflow: visible;
-    }
-
-    .main-content { max-width: 520px; }
-    .heading { font-size: 30px; }
-    .form-grid { grid-template-columns: 1fr; }
-    .form-card { padding: 22px 17px; }
-    .right-art { width: 130px; height: 110px; }
-}
-
-@media (max-width: 380px) {
-    .profile { padding: 20px; }
-    .heading { font-size: 26px; }
-    .form-heading h2 { font-size: 15px; }
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>House Price Prediction | Boppa Sharvan</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+
+        /* ==================================
+           GLOBAL STYLES
+        ================================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: #f0f2ed;
+            color: #102f26;
+            min-height: 100vh;
+        }
+
+        /* ==================================
+           MAIN LAYOUT
+        ================================== */
+
+        .main-container {
+            display: flex;
+            min-height: 100vh;
+            width: 100%;
+        }
+
+        /* ==================================
+           LEFT SIDEBAR
+        ================================== */
+
+        .sidebar {
+            width: 35%;
+            min-height: 100vh;
+            background: linear-gradient(
+                145deg,
+                #064d3c 0%,
+                #03271f 55%,
+                #001c16 100%
+            );
+
+            color: #ffffff;
+            padding: 26px;
+            position: relative;
+            overflow: hidden;
+
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Sidebar Logo */
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 105px;
+        }
+
+        .home-icon {
+            width: 44px;
+            height: 44px;
+            background: #e9bd66;
+            color: #153c2e;
+            border-radius: 13px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 23px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-header h2 {
+            font-size: 19px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+        }
+
+        /* ==================================
+           PROFILE IMAGE
+        ================================== */
+
+        .profile-image {
+            width: 136px;
+            height: 146px;
+
+            padding: 5px;
+
+            border: 1.5px solid #d9ad55;
+            border-radius: 18px;
+
+            background: rgba(255,255,255,0.08);
+
+            overflow: hidden;
+
+            margin-bottom: 13px;
+        }
+
+        .profile-image img {
+            display: block;
+
+            width: 100%;
+            height: 100%;
+
+            object-fit: cover;
+            object-position: center 35%;
+
+            border-radius: 12px;
+
+            image-rendering: auto;
+
+            filter: none;
+            transform: none;
+        }
+
+        /* ==================================
+           PROFILE DETAILS
+        ================================== */
+
+        .profile-name {
+            font-family: 'Playfair Display', serif;
+
+            font-size: 28px;
+            font-weight: 700;
+
+            color: #ffffff;
+
+            margin-bottom: 4px;
+        }
+
+        .profile-role {
+            font-size: 15px;
+            font-weight: 700;
+
+            color: #e6b65d;
+
+            letter-spacing: 0.6px;
+        }
+
+        .gold-line {
+            width: 60px;
+            height: 3px;
+
+            background: #e6b65d;
+
+            margin: 14px 0;
+        }
+
+        /* ==================================
+           ABOUT PROJECT
+        ================================== */
+
+        .about-section {
+            position: relative;
+            z-index: 2;
+        }
+
+        .about-section h3 {
+            font-size: 16px;
+            font-weight: 800;
+
+            margin-bottom: 10px;
+        }
+
+        .about-section p {
+            font-size: 13px;
+            line-height: 1.9;
+
+            color: #d4e6df;
+
+            max-width: 430px;
+        }
+
+        /* ==================================
+           CONTACT DETAILS
+        ================================== */
+
+        .contact-section {
+            margin-top: 16px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            margin-bottom: 10px;
+
+            font-size: 13px;
+            color: #ffffff;
+        }
+
+        .contact-icon {
+            width: 30px;
+            height: 30px;
+
+            border: 1px solid rgba(255,255,255,0.15);
+            background: rgba(255,255,255,0.06);
+
+            border-radius: 10px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            color: #e9bd66;
+            flex-shrink: 0;
+        }
+
+        .contact-item a {
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        .contact-item a:hover {
+            color: #e9bd66;
+        }
+
+        /* ==================================
+           SIDEBAR BUILDING DECORATION
+        ================================== */
+
+        .building-decoration {
+            position: absolute;
+            bottom: 0;
+            left: 9%;
+
+            width: 82%;
+            height: 155px;
+
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+
+            opacity: 0.15;
+
+            pointer-events: none;
+        }
+
+        .building {
+            width: 17%;
+            border: 1px solid #d9ad55;
+
+            background: repeating-linear-gradient(
+                to bottom,
+                transparent 0px,
+                transparent 18px,
+                #d9ad55 19px,
+                transparent 20px
+            );
+        }
+
+        .building:nth-child(1) {
+            height: 75px;
+        }
+
+        .building:nth-child(2) {
+            height: 115px;
+        }
+
+        .building:nth-child(3) {
+            height: 95px;
+        }
+
+        .building:nth-child(4) {
+            height: 55px;
+        }
+
+        .building:nth-child(5) {
+            height: 125px;
+        }
+
+        /* ==================================
+           SIDEBAR FOOTER
+        ================================== */
+
+        .sidebar-footer {
+            position: absolute;
+            bottom: 18px;
+            left: 26px;
+            right: 26px;
+
+            border-top: 1px solid rgba(255,255,255,0.15);
+
+            padding-top: 15px;
+
+            font-size: 10px;
+            color: #8cb4a7;
+
+            letter-spacing: 0.6px;
+
+            z-index: 3;
+        }
+
+        /* ==================================
+           RIGHT CONTENT AREA
+        ================================== */
+
+        .content {
+            width: 65%;
+            min-height: 100vh;
+
+            background: linear-gradient(
+                135deg,
+                #f7f8f5,
+                #e9eee7
+            );
+
+            padding: 25px 6% 25px;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            position: relative;
+        }
+
+        /* ==================================
+           PAGE HEADING
+        ================================== */
+
+        .heading-section {
+            width: 100%;
+            text-align: center;
+
+            margin-bottom: 14px;
+        }
+
+        .heading-label {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+
+            color: #00835e;
+
+            font-size: 11px;
+            font-weight: 800;
+
+            letter-spacing: 4px;
+
+            margin-bottom: 13px;
+        }
+
+        .heading-label::before,
+        .heading-label::after {
+            content: "";
+
+            width: 30px;
+            height: 1px;
+
+            background: #00835e;
+        }
+
+        .heading-section h1 {
+            font-family: 'Playfair Display', serif;
+
+            font-size: clamp(30px, 3vw, 43px);
+
+            line-height: 1.15;
+
+            color: #12392c;
+
+            font-weight: 800;
+        }
+
+        .heading-section h2 {
+            font-family: 'Playfair Display', serif;
+
+            font-size: clamp(25px, 2.8vw, 39px);
+
+            line-height: 1.2;
+
+            color: #00845e;
+
+            font-weight: 700;
+        }
+
+        .heading-section p {
+            font-size: 12px;
+
+            color: #73877f;
+
+            margin-top: 10px;
+        }
+
+        /* ==================================
+           FORM CARD
+        ================================== */
+
+        .form-card {
+            width: 100%;
+            max-width: 920px;
+
+            background: #ffffff;
+
+            border: 1px solid #dce7df;
+
+            border-radius: 24px;
+
+            padding: 16px 23px;
+
+            box-shadow:
+                0 12px 35px rgba(13, 60, 43, 0.06);
+
+            position: relative;
+            z-index: 2;
+        }
+
+        .form-card::before {
+            content: "";
+
+            position: absolute;
+            top: 0;
+            left: 4%;
+            right: 4%;
+
+            height: 3px;
+
+            background: linear-gradient(
+                to right,
+                #00845e,
+                #e6bd68
+            );
+
+            border-radius: 0 0 5px 5px;
+        }
+
+        /* ==================================
+           FORM HEADER
+        ================================== */
+
+        .form-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            margin-bottom: 13px;
+        }
+
+        .form-header h3 {
+            font-size: 18px;
+            font-weight: 800;
+
+            color: #123b2e;
+        }
+
+        .form-header p {
+            font-size: 11px;
+            color: #91a39a;
+
+            margin-top: 4px;
+        }
+
+        .required-note {
+            font-size: 10px;
+            color: #ad7147;
+        }
+
+        /* ==================================
+           FORM GRID
+        ================================== */
+
+        .form-grid {
+            display: grid;
+
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+
+            column-gap: 17px;
+            row-gap: 10px;
+        }
+
+        .form-group {
+            width: 100%;
+            min-width: 0;
+        }
+
+        .form-group label {
+            display: block;
+
+            font-size: 11px;
+            font-weight: 700;
+
+            color: #173e32;
+
+            margin-bottom: 6px;
+        }
+
+        .form-group input,
+        .form-group select {
+
+            width: 100%;
+            height: 41px;
+
+            padding: 0 13px;
+
+            border: 1px solid #dce6df;
+
+            border-radius: 11px;
+
+            background: #f9fbfa;
+
+            color: #173c30;
+
+            font-family: 'DM Sans', sans-serif;
+
+            font-size: 12px;
+
+            outline: none;
+
+            transition: all 0.25s ease;
+        }
+
+        .form-group input::placeholder {
+            color: #a4b4ae;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+
+            border-color: #00845e;
+
+            background: #ffffff;
+
+            box-shadow: 0 0 0 3px rgba(0,132,94,0.08);
+        }
+
+        .form-group select {
+            cursor: pointer;
+        }
+
+        /* ==================================
+           CITY MAPPING
+        ================================== */
+
+        .city-mapping {
+            margin-top: 7px;
+
+            padding: 8px 11px;
+
+            background: #eaf7f0;
+
+            border: 1px solid #cce9d8;
+
+            border-radius: 7px;
+
+            color: #00845e;
+
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        /* ==================================
+           PREDICTION BUTTON
+        ================================== */
+
+        .predict-button {
+
+            width: 100%;
+            height: 46px;
+
+            margin-top: 14px;
+
+            border: none;
+
+            border-radius: 12px;
+
+            background: linear-gradient(
+                100deg,
+                #07875f,
+                #00573f
+            );
+
+            color: #ffffff;
+
+            font-size: 13px;
+            font-weight: 800;
+
+            letter-spacing: 0.3px;
+
+            cursor: pointer;
+
+            transition: all 0.3s ease;
+
+            box-shadow: 0 5px 14px rgba(0,90,62,0.15);
+        }
+
+        .predict-button:hover {
+
+            background: linear-gradient(
+                100deg,
+                #006e4d,
+                #00432f
+            );
+
+            transform: translateY(-2px);
+
+            box-shadow: 0 8px 18px rgba(0,90,62,0.22);
+        }
+
+        .predict-button:active {
+            transform: translateY(0);
+        }
+
+        /* ==================================
+           PREDICTION RESULT
+        ================================== */
+
+        .result-box {
+
+            width: 100%;
+
+            margin-top: 16px;
+
+            padding: 17px;
+
+            background: #eaf7f0;
+
+            border: 1px solid #bce3ce;
+
+            border-radius: 12px;
+
+            text-align: center;
+        }
+
+        .result-box h3 {
+            color: #08734f;
+            font-size: 15px;
+
+            margin-bottom: 7px;
+        }
+
+        .result-price {
+
+            color: #006b4b;
+
+            font-family: 'Playfair Display', serif;
+
+            font-size: 29px;
+            font-weight: 800;
+        }
+
+        .result-box p {
+            color: #6e8b7d;
+
+            font-size: 11px;
+
+            margin-top: 6px;
+        }
+
+        /* ==================================
+           ERROR MESSAGE
+        ================================== */
+
+        .error-box {
+
+            width: 100%;
+
+            margin-top: 15px;
+
+            padding: 13px;
+
+            background: #fff0ed;
+
+            border: 1px solid #f1c8bf;
+
+            border-radius: 10px;
+
+            color: #b43c2c;
+
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* ==================================
+           BOTTOM CONTENT
+        ================================== */
+
+        .content-footer {
+
+            margin-top: 11px;
+
+            text-align: center;
+
+            font-size: 10px;
+
+            color: #91a39b;
+
+            letter-spacing: 0.5px;
+        }
+
+        /* ==================================
+           RESPONSIVE DESIGN
+        ================================== */
+
+        @media (max-width: 1050px) {
+
+            .sidebar {
+                width: 34%;
+                padding: 20px;
+            }
+
+            .content {
+                width: 66%;
+                padding: 30px 4%;
+            }
+
+            .sidebar-header {
+                margin-bottom: 75px;
+            }
+
+            .sidebar-header h2 {
+                font-size: 15px;
+            }
+
+            .profile-name {
+                font-size: 24px;
+            }
+
+            .form-card {
+                padding: 18px;
+            }
+
+        }
+
+        @media (max-width: 768px) {
+
+            .main-container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                min-height: auto;
+                padding: 22px;
+            }
+
+            .sidebar-header {
+                margin-bottom: 30px;
+            }
+
+            .profile-image {
+                width: 120px;
+                height: 135px;
+            }
+
+            .building-decoration {
+                display: none;
+            }
+
+            .sidebar-footer {
+                position: relative;
+                left: auto;
+                right: auto;
+                bottom: auto;
+
+                margin-top: 20px;
+            }
+
+            .content {
+                width: 100%;
+                min-height: auto;
+
+                padding: 30px 18px;
+            }
+
+            .heading-section h1 {
+                font-size: 32px;
+            }
+
+            .heading-section h2 {
+                font-size: 27px;
+            }
+
+            .form-card {
+                max-width: 600px;
+            }
+
+        }
+
+        @media (max-width: 520px) {
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-header {
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .required-note {
+                white-space: nowrap;
+            }
+
+            .heading-section h1 {
+                font-size: 28px;
+            }
+
+            .heading-section h2 {
+                font-size: 24px;
+            }
+
+            .heading-label {
+                font-size: 9px;
+                letter-spacing: 2px;
+            }
+
+            .form-card {
+                padding: 17px;
+                border-radius: 17px;
+            }
+
+        }
+
+    </style>
+
 </head>
 
 <body>
 
-<div class="page">
+    {% set current_city = selected_city or 'Seattle' %}
 
-    <!-- LEFT PROFILE PANEL -->
+    <div class="main-container">
 
-    <aside class="profile">
+        <!-- ==================================
+             LEFT SIDEBAR
+        ================================== -->
 
-        <div class="brand">
-            <div class="brand-icon">⌂</div>
-            HOUSE PRICE PREDICTION
-        </div>
+        <aside class="sidebar">
 
-        <div class="profile-content">
+            <!-- Logo -->
 
-            <div class="photo-frame">
-                <img src="{{ url_for('static', filename='Linkdin profile.jpeg') }}"
-                     alt="Boppa Sharvan">
-            </div>
+            <div class="sidebar-header">
 
-            <h1>Boppa Sharvan</h1>
-
-            <p class="role">Aspiring Data Scientist</p>
-
-            <div class="profile-line"></div>
-
-            <h3 class="about-title">About This Project</h3>
-
-            <p class="about">
-                This House Price Prediction system uses Machine Learning
-                to estimate residential property prices based on important
-                housing features. It analyzes location, bedrooms, bathrooms,
-                living area, lot size, house condition and construction year
-                to generate an estimated property value.
-            </p>
-
-            <div class="contact">
-
-                <div class="contact-item">
-                    <div class="contact-icon">☎</div>
-                    <span>8660615881</span>
+                <div class="home-icon">
+                    ⌂
                 </div>
 
-                <div class="contact-item">
-                    <div class="contact-icon">✉</div>
-                    <span>boppasharvan024@gmail.com</span>
-                </div>
+                <h2>HOUSE PRICE PREDICTION</h2>
 
             </div>
 
-        </div>
 
-        <div class="profile-footer">
-            HOUSE PRICE PREDICTION PROJECT
-            DEVELOPED BY BOPPA SHARVAN &nbsp; @ &nbsp;2026
-        </div>
+            <!-- Profile Image -->
 
-        <div class="architecture">
-            <div class="building"></div>
-            <div class="building"></div>
-            <div class="building"></div>
-            <div class="building"></div>
-            <div class="building"></div>
-        </div>
+            <div class="profile-image">
 
-    </aside>
+                <img
+                    src="{{ url_for('static', filename='Linkdin profile.jpeg') }}"
+                    alt="Boppa Sharvan Profile Photo"
+                    fetchpriority="high"
+                    decoding="async"
+                >
 
-    <!-- RIGHT PREDICTION PANEL -->
-
-    <main class="main">
-
-        <div class="main-content">
-
-            <div class="top-label">
-                Machine Learning Based System
             </div>
 
-            <h1 class="heading">
-                House Price Prediction<br>
-                <span>Predict Your Dream House Price</span>
+
+            <!-- Profile Details -->
+
+            <h1 class="profile-name">
+                Boppa Sharvan
             </h1>
 
-            <p class="subtitle">
-                Enter the property details to discover its estimated market value.
+            <p class="profile-role">
+                Aspiring Data Scientist
             </p>
 
-            <div class="form-card">
+            <div class="gold-line"></div>
 
-                <div class="form-heading">
-                    <div>
-                        <h2>Property Details</h2>
-                        <p>Fill in all the details below for price prediction</p>
+
+            <!-- About Project -->
+
+            <div class="about-section">
+
+                <h3>About This Project</h3>
+
+                <p>
+                    This House Price Prediction system uses Machine
+                    Learning to estimate residential property prices
+                    based on important housing features. It analyzes
+                    location, bedrooms, bathrooms, living area, lot size,
+                    house condition and construction year to generate
+                    an estimated property value.
+                </p>
+
+            </div>
+
+
+            <!-- Contact Details -->
+
+            <div class="contact-section">
+
+                <div class="contact-item">
+
+                    <div class="contact-icon">
+                        ☎
                     </div>
 
-                    <span class="required">* Required fields</span>
+                    <a href="tel:8660615881">
+                        8660615881
+                    </a>
+
                 </div>
 
-                <form action="/predict" method="POST">
+
+                <div class="contact-item">
+
+                    <div class="contact-icon">
+                        ✉
+                    </div>
+
+                    <a href="mailto:boppasharvan024@gmail.com">
+                        boppasharvan024@gmail.com
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- Building Decoration -->
+
+            <div class="building-decoration">
+
+                <div class="building"></div>
+                <div class="building"></div>
+                <div class="building"></div>
+                <div class="building"></div>
+                <div class="building"></div>
+
+            </div>
+
+
+            <!-- Sidebar Footer -->
+
+            <div class="sidebar-footer">
+
+                HOUSE PRICE PREDICTION PROJECT DEVELOPED BY
+                BOPPA SHARVAN &nbsp; @ &nbsp; 2026
+
+            </div>
+
+        </aside>
+
+
+        <!-- ==================================
+             RIGHT CONTENT
+        ================================== -->
+
+        <main class="content">
+
+
+            <!-- Heading -->
+
+            <section class="heading-section">
+
+                <div class="heading-label">
+
+                    MACHINE LEARNING BASED SYSTEM
+
+                </div>
+
+                <h1>
+                    House Price Prediction
+                </h1>
+
+                <h2>
+                    Predict Your Dream House Price
+                </h2>
+
+                <p>
+                    Enter the property details to discover its
+                    estimated market value.
+                </p>
+
+            </section>
+
+
+            <!-- ==================================
+                 PROPERTY FORM
+            ================================== -->
+
+            <section class="form-card">
+
+                <div class="form-header">
+
+                    <div>
+
+                        <h3>Property Details</h3>
+
+                        <p>
+                            Fill in all the details below for price prediction
+                        </p>
+
+                    </div>
+
+                    <span class="required-note">
+                        * Required fields
+                    </span>
+
+                </div>
+
+
+                <!-- Prediction Form -->
+
+                <form
+                    action="{{ url_for('predict') }}"
+                    method="POST"
+                >
 
                     <div class="form-grid">
 
-                        <!-- CITY WITH MAPPING -->
 
-                        <div class="field">
-                            <label>City *</label>
+                        <!-- CITY -->
 
-                            <select name="city" id="citySelect" required>
-                                {% for city in cities %}
-                                <option value="{{ city }}"
-                                        data-code="{{ city_mapping[city] }}"
-                                        {% if selected_city is defined and selected_city == city %}
-                                        selected
-                                        {% endif %}>
-                                    {{ city }}
+                        <div class="form-group">
+
+                            <label for="city">
+                                City *
+                            </label>
+
+                            <select
+                                name="city"
+                                id="city"
+                                required
+                            >
+
+                                <option value="" disabled
+                                    {% if not selected_city %}selected{% endif %}>
+                                    Select city
                                 </option>
+
+                                {% for city in cities %}
+
+                                    <option
+                                        value="{{ city }}"
+                                        data-code="{{ city_mapping[city] }}"
+                                        {% if city == current_city %}selected{% endif %}
+                                    >
+
+                                        {{ city }}
+
+                                    </option>
+
                                 {% endfor %}
+
                             </select>
 
-                            <div class="mapping-info" id="mappingInfo">
-                                Selected City Mapping Value: 0
+                            <div class="city-mapping" id="cityMapping">
+
+                                Selected City:
+                                {{ current_city }}
+                                |
+                                Mapping Value:
+                                {{ city_mapping.get(current_city, 'N/A') }}
+
                             </div>
+
                         </div>
 
-                        <div class="field">
-                            <label>State ZIP Code *</label>
-                            <input type="text" name="statezip"
-                                   placeholder="e.g. WA 98103" required>
+
+                        <!-- ZIP CODE -->
+
+                        <div class="form-group">
+
+                            <label for="statezip">
+                                State ZIP Code *
+                            </label>
+
+                            <input
+                                type="text"
+                                name="statezip"
+                                id="statezip"
+                                placeholder="e.g. 98103"
+                                value="{{ selected_zip }}"
+                                maxlength="5"
+                                minlength="5"
+                                pattern="[0-9]{5}"
+                                inputmode="numeric"
+                                title="Enter a valid 5-digit ZIP code"
+                                required
+                            >
+
                         </div>
 
-                        <div class="field">
-                            <label>Number of Bedrooms *</label>
-                            <input type="number" name="bedrooms"
-                                   min="0" step="any"
-                                   placeholder="e.g. 3" required>
+
+                        <!-- BEDROOMS -->
+
+                        <div class="form-group">
+
+                            <label for="bedrooms">
+                                Number of Bedrooms *
+                            </label>
+
+                            <input
+                                type="number"
+                                name="bedrooms"
+                                id="bedrooms"
+                                placeholder="e.g. 3"
+                                min="1"
+                                step="1"
+                                value="{{ values.get('bedrooms', '') }}"
+                                required
+                            >
+
                         </div>
 
-                        <div class="field">
-                            <label>Number of Bathrooms *</label>
-                            <input type="number" name="bathrooms"
-                                   min="0" step="any"
-                                   placeholder="e.g. 2" required>
+
+                        <!-- BATHROOMS -->
+
+                        <div class="form-group">
+
+                            <label for="bathrooms">
+                                Number of Bathrooms *
+                            </label>
+
+                            <input
+                                type="number"
+                                name="bathrooms"
+                                id="bathrooms"
+                                placeholder="e.g. 2"
+                                min="0.25"
+                                step="0.25"
+                                value="{{ values.get('bathrooms', '') }}"
+                                required
+                            >
+
                         </div>
 
-                        <div class="field">
-                            <label>Living Area (Sq Ft) *</label>
-                            <input type="number" name="sqft_living"
-                                   min="1" placeholder="e.g. 1800" required>
+
+                        <!-- LIVING AREA -->
+
+                        <div class="form-group">
+
+                            <label for="sqft_living">
+                                Living Area (Sq Ft) *
+                            </label>
+
+                            <input
+                                type="number"
+                                name="sqft_living"
+                                id="sqft_living"
+                                placeholder="e.g. 1800"
+                                min="1"
+                                step="1"
+                                value="{{ values.get('sqft_living', '') }}"
+                                required
+                            >
+
                         </div>
 
-                        <div class="field">
-                            <label>Lot Area (Sq Ft) *</label>
-                            <input type="number" name="sqft_lot"
-                                   min="1" placeholder="e.g. 5000" required>
+
+                        <!-- LOT AREA -->
+
+                        <div class="form-group">
+
+                            <label for="sqft_lot">
+                                Lot Area (Sq Ft) *
+                            </label>
+
+                            <input
+                                type="number"
+                                name="sqft_lot"
+                                id="sqft_lot"
+                                placeholder="e.g. 5000"
+                                min="1"
+                                step="1"
+                                value="{{ values.get('sqft_lot', '') }}"
+                                required
+                            >
+
                         </div>
 
-                        <div class="field">
-                            <label>Number of Floors *</label>
-                            <input type="number" name="floors"
-                                   min="1" step="any"
-                                   placeholder="e.g. 2" required>
+
+                        <!-- FLOORS -->
+
+                        <div class="form-group">
+
+                            <label for="floors">
+                                Number of Floors *
+                            </label>
+
+                            <input
+                                type="number"
+                                name="floors"
+                                id="floors"
+                                placeholder="e.g. 2"
+                                min="0.5"
+                                step="0.5"
+                                value="{{ values.get('floors', '') }}"
+                                required
+                            >
+
                         </div>
 
-                        <div class="field">
-                            <label>House Condition (1–5) *</label>
-                            <select name="condition" required>
-                                <option value="">Select condition</option>
-                                <option value="1">1 - Poor</option>
-                                <option value="2">2 - Fair</option>
-                                <option value="3">3 - Average</option>
-                                <option value="4">4 - Good</option>
-                                <option value="5">5 - Excellent</option>
+
+                        <!-- CONDITION -->
+
+                        <div class="form-group">
+
+                            <label for="condition">
+                                House Condition (1–5) *
+                            </label>
+
+                            <select
+                                name="condition"
+                                id="condition"
+                                required
+                            >
+
+                                <option value="" disabled
+                                    {% if not values.get('condition') %}selected{% endif %}>
+                                    Select condition
+                                </option>
+
+                                {% for i in range(1, 6) %}
+
+                                    <option
+                                        value="{{ i }}"
+                                        {% if values.get('condition')|string == i|string %}selected{% endif %}
+                                    >
+
+                                        {{ i }}
+
+                                        {% if i == 1 %}
+                                            - Poor
+                                        {% elif i == 2 %}
+                                            - Fair
+                                        {% elif i == 3 %}
+                                            - Average
+                                        {% elif i == 4 %}
+                                            - Good
+                                        {% elif i == 5 %}
+                                            - Excellent
+                                        {% endif %}
+
+                                    </option>
+
+                                {% endfor %}
+
                             </select>
+
                         </div>
 
-                        <div class="field">
-                            <label>Year Built *</label>
-                            <input type="number" name="yr_built"
-                                   min="1800" max="2026"
-                                   placeholder="e.g. 2005" required>
+
+                        <!-- YEAR BUILT -->
+
+                        <div class="form-group">
+
+                            <label for="yr_built">
+                                Year Built *
+                            </label>
+
+                            <input
+                                type="number"
+                                name="yr_built"
+                                id="yr_built"
+                                placeholder="e.g. 2005"
+                                min="1800"
+                                max="2026"
+                                step="1"
+                                value="{{ values.get('yr_built', '') }}"
+                                required
+                            >
+
                         </div>
+
 
                     </div>
 
-                    <button type="submit" class="submit-btn">
+
+                    <!-- PREDICT BUTTON -->
+
+                    <button
+                        type="submit"
+                        class="predict-button"
+                    >
+
                         ✦ &nbsp; PREDICT HOUSE PRICE &nbsp; →
+
                     </button>
+
 
                 </form>
 
-                {% if prediction_text %}
-                <div class="result">{{ prediction_text }}</div>
+
+                <!-- ==================================
+                     PREDICTION RESULT
+                ================================== -->
+
+                {% if prediction is not none %}
+
+                    <div class="result-box">
+
+                        <h3>
+                            ✨ Estimated House Price
+                        </h3>
+
+                        <div class="result-price">
+
+                            ${{ "{:,.2f}".format(prediction) }}
+
+                        </div>
+
+                        <p>
+                            Predicted property value based on
+                            the supplied details.
+                        </p>
+
+                    </div>
+
                 {% endif %}
 
-                {% if error_text %}
-                <div class="result error">{{ error_text }}</div>
+
+                <!-- ==================================
+                     ERROR MESSAGE
+                ================================== -->
+
+                {% if error %}
+
+                    <div class="error-box">
+
+                        ⚠ {{ error }}
+
+                    </div>
+
                 {% endif %}
+
+
+            </section>
+
+
+            <!-- Bottom Footer -->
+
+            <div class="content-footer">
+
+                POWERED BY MACHINE LEARNING
+
+                &nbsp; | &nbsp;
+
+                INTELLIGENT PROPERTY PRICE ESTIMATION
 
             </div>
 
-            <p class="bottom-note">
-                POWERED BY MACHINE LEARNING
-                &nbsp; | &nbsp;
-                INTELLIGENT PROPERTY PRICE ESTIMATION
-            </p>
 
-        </div>
+        </main>
 
-        <div class="right-art">
-            <svg viewBox="0 0 250 180" fill="none"
-                 stroke="#087b57" stroke-width="2">
-                <path d="M5 175V85H65V175 M75 175V30H145V175 M155 175V65H225V175"/>
-                <path d="M85 45H135 M85 60H135 M85 75H135 M85 90H135 M85 105H135 M85 120H135"/>
-                <path d="M15 100H55 M15 120H55 M15 140H55"/>
-                <path d="M165 85H215 M165 105H215 M165 125H215"/>
-                <path d="M110 30V10L125 0L140 10V30"/>
-                <path d="M0 175H250"/>
-            </svg>
-        </div>
+    </div>
 
-    </main>
 
-</div>
+    <!-- ==================================
+         CITY MAPPING JAVASCRIPT
+    ================================== -->
 
-<!-- CITY MAPPING SCRIPT -->
+    <script>
 
-<script>
-const citySelect = document.getElementById("citySelect");
-const mappingInfo = document.getElementById("mappingInfo");
+        const citySelect = document.getElementById("city");
 
-function updateCityMapping() {
-    const selectedOption =
-        citySelect.options[citySelect.selectedIndex];
+        const cityMapping = document.getElementById("cityMapping");
 
-    const city = selectedOption.value;
-    const mapping = selectedOption.dataset.code;
 
-    mappingInfo.textContent =
-        "Selected City: " + city +
-        " | Mapping Value: " + mapping;
-}
+        function updateCityMapping() {
 
-citySelect.addEventListener("change", updateCityMapping);
-updateCityMapping();
-</script>
+            const selectedOption =
+                citySelect.options[citySelect.selectedIndex];
+
+            const selectedCity = selectedOption.value;
+
+            const mappingValue = selectedOption.dataset.code;
+
+            if (selectedCity && mappingValue !== undefined) {
+
+                cityMapping.textContent =
+                    `Selected City: ${selectedCity} | Mapping Value: ${mappingValue}`;
+
+            } else {
+
+                cityMapping.textContent =
+                    "Please select a city.";
+
+            }
+
+        }
+
+
+        citySelect.addEventListener(
+            "change",
+            updateCityMapping
+        );
+
+
+        updateCityMapping();
+
+    </script>
 
 </body>
+
 </html>
